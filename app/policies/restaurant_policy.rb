@@ -1,8 +1,11 @@
 class RestaurantPolicy < ApplicationPolicy
-  class Scope < Scope
     def resolve
       # show all restaurants
       scope.all
     end
-  end
+
+    def show?
+      # everyone can access the show endpoint
+      true
+    end
 end
