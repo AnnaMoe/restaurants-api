@@ -8,4 +8,11 @@ class RestaurantPolicy < ApplicationPolicy
       # everyone can access the show endpoint
       true
     end
+
+    def update?
+      # only restaurant owners can update it
+      # record = current restaurant
+      record.user == user
+      
+    end
 end
