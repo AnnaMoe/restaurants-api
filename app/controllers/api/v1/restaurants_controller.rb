@@ -1,7 +1,7 @@
 class Api::V1::RestaurantsController < Api::V1::BaseController
   # authenticate endpoints which are not index or show
   acts_as_token_authentication_handler_for User, except: [ :index, :show ]
-  before_action :set_restaurant, only: [ :show, :update ]
+  before_action :set_restaurant, only: [ :show, :update, :destroy ]
   
   def index
     @restaurants = policy_scope(Restaurant)
@@ -29,6 +29,14 @@ class Api::V1::RestaurantsController < Api::V1::BaseController
     end
   end
 
+  def destroy
+    @restaurant.destroy
+    head :no_content
+    # No need to create a `destroy.json.jbuilder` view, 204 message self-explanatroy
+    # but can do:
+    # render json {message: "It worked"}
+  end
+
   private
 
   def set_restaurant
@@ -42,6 +50,6 @@ class Api::V1::RestaurantsController < Api::V1::BaseController
 
   def render_error
     render json: { errors: @restaurant.errors.full_messages },
-      status: :unprocessable_entity
+      status: :unprocessable_entity #422 - input from body which was sent is not valid
   end
 end
